@@ -20,12 +20,14 @@ namespace Services.Services
             _context = context;
         }
 
-        public User CreateUser(User user)
+        public async Task<ResponseModel<User>> CreateUser(User user)
         {
+            ResponseModel<User> response = new ResponseModel<User>();
             try
             {
                 var userdto = new User();
                 userdto.Id = Guid.NewGuid();
+                userdto.Name = user.Name;
                 userdto.Address = user.Address;
                 userdto.City = user.City;
                 userdto.Email = user.Email;
@@ -34,85 +36,118 @@ namespace Services.Services
                 userdto.IsDeleted = false;
                 userdto.DepartmentId = user.DepartmentId;
                 _context.Users.Add(userdto);
-                _context.SaveChangesAsync();
-                return _context.Users.FindAsync(userdto.Id).Result;
+                await _context.SaveChangesAsync();
+                response.Entity = await _context.Users.FindAsync(userdto.Id);
+                response.Status = true;
+                return response;
 
             }
             catch(Exception ex)
             {
+                response.Status = false;
+                response.ReturnMessage.Add(ex.Message);
                 return null;
             }
         }
 
-        public bool DeleteUser(int id)
+        public async Task<ResponseModel<User>> DeleteUser(Guid id)
         {
+            ResponseModel<User> response = new ResponseModel<User>();
+
             try
             {
-                var user = _context.Users.FindAsync(id).Result;
+                var user = await _context.Users.FindAsync(id);
+                if(user == null)
+                {
+                    response.Status = false;
+                    response.ReturnMessage.Add("user noy found");
+                    return response;
+                }
                 user.IsDeleted = true;
-                _context.Users.Update(user);
-                _context.SaveChangesAsync();
-                return true;
+                _context.Entry(user).Property(x => x.IsDeleted).IsModified=true;
+                await _context.SaveChangesAsync();
+                response.Entity = await _context.Users.FindAsync(id);
+                response.Status= true;
+                return response;
             }
             catch(Exception e) 
             {
-                return false;
+                response.Status = false;
+                response.ReturnMessage.Add(e.Message);
+                return response;
             }
             
             
         }
 
-        public User GetUser(Guid id)
+        public async Task<ResponseModel<User>> GetUserById(Guid id)
         {
+            ResponseModel<User> response = new ResponseModel<User>();
             try
             {
-                var user = _context.Users.FindAsync(id).Result;
-                return user;
+                var user = await _context.Users.FindAsync(id);
+                response.Entity = user;
+                response.Status = true;
+                return response;
             }
             catch (Exception e) 
             
             {
+                response.Status = false;
+                response.ReturnMessage.Add(e.Message);
                 return null;
             }
                 
         }
 
-        public List<User> GetUsers()
+        public async Task<ResponseModel<List<User>>> GetUsers()
         {
+            ResponseModel<List<User>> response = new ResponseModel<List<User>>();
+
             try
             {
-                var users = _context.Users.ToListAsync().Result;
-                return users;
+                var users = await _context.Users.ToListAsync();
+                response.Entity = users;
+                return response;
 
             }
-            catch (Exception e) {
-                return null;
+            catch (Exception e) 
+            {
+                response.Status = false;
+                response.ReturnMessage.Add(e.Message);
+                return response;
+
             
             }
         }
 
-        public User UpdateUser(User user)
+        public async Task<ResponseModel<User>> UpdateUser(User user)
         {
-            var userbyid = new User();
+            ResponseModel<User> response = new ResponseModel<User>();
             try
             {
-                userbyid = _context.Users.FindAsync(user.Id).Result;
-                userbyid.IsDeleted = false;
+                var userbyid = _context.Users.FindAsync(user.Id).Result;
+                userbyid.IsDeleted = user.IsDeleted;
                 userbyid.Address = user.Address;
                 userbyid.City = user.City;
                 userbyid.Email = user.Email;
                 userbyid.DepartmentId = user.DepartmentId;
+                userbyid.UpdatedDate = DateTime.Now;
                 _context.Users.Update(userbyid);
-                _context.SaveChangesAsync();
+                await _context.SaveChangesAsync();
+                response.Status = true;
+                response.Entity = _context.Users.FindAsync(user.Id).Result;
+                return response;
             }
             catch (Exception ex) 
             {
-                return null;
+                response.Status = false;
+                response.ReturnMessage.Add(ex.Message);
+                return response;
 
             }
             
             
-            return userbyid;
         }
     }
 }

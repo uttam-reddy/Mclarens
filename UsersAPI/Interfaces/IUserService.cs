@@ -9,11 +9,11 @@ namespace Services.Interfaces
 {
     public interface IUserService
     {
-        List<User> GetUsers();
-        User GetUser(Guid id);
-        User UpdateUser(User user);
+        Task<ResponseModel<List<User>>> GetUsers();
+        Task<ResponseModel<User>> GetUserById(Guid id);
+        Task<ResponseModel<User>> UpdateUser(User user);
 
-        User CreateUser(User user);
-        bool DeleteUser(int id);
+        Task<ResponseModel<User>> CreateUser(User user);
+        Task<ResponseModel<User>> DeleteUser(Guid id);
     }
 }

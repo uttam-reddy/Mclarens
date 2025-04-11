@@ -16,38 +16,103 @@ namespace UsersAPI.Controllers
             _userService = userService;
         }
         [HttpGet]
-        public List<User> GetUsers()
+        public async Task<ActionResult<ResponseModel<List<User>>>> GetUsers()
         {
-            var users = _userService.GetUsers();
-            return users;
+            ResponseModel<List<User>> response = new ResponseModel<List<User>>();
+            try
+            {
+                response = await _userService.GetUsers();
+                if (!response.Status)
+                {
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception ex) 
+            {
+                response.Status = false;
+                return BadRequest(response);
+            }
         }
 
         [HttpGet("{id}")]
-        public User GetUserById(Guid id)
+        public async Task<ActionResult<ResponseModel<User>>> GetUserById(Guid id)
         {
-            var users = _userService.GetUser(id);
-            return users;
+            ResponseModel<User> response = new ResponseModel<User>();
+            try
+            {
+                response = await _userService.GetUserById(id);
+                if (!response.Status)
+                {
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.Status = false;
+                return BadRequest(response);
+            }
+        }
+
+        [HttpPost("CreateUser")]
+        public async Task<ActionResult<ResponseModel<User>>> CreateUser(User user)
+        {
+            ResponseModel<User> response = new ResponseModel<User>();
+            try
+            {
+                response = await _userService.CreateUser(user);
+                if (!response.Status)
+                {
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.Status = false;
+                return BadRequest(response);
+            }
         }
 
         [HttpPost]
-        public User CreateUser(User user)
+        public async Task<ActionResult<ResponseModel<User>>> UpdateUser(User user)
         {
-            var users = _userService.CreateUser(user);
-            return users;
+            ResponseModel<User> response = new ResponseModel<User>();
+            try
+            {
+                response = await _userService.UpdateUser(user);
+                if (!response.Status)
+                {
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.Status = false;
+                return BadRequest(response);
+            }
         }
 
-        [HttpPost]
-        public User UpdateUser(User user)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ResponseModel<User>>> DeleteUser(Guid id)
         {
-            var users = _userService.UpdateUser(user);
-            return users;
-        }
-
-        [HttpDelete("id")]
-        public bool DeleteUser(int id)
-        {
-            var isdeleted = _userService.DeleteUser(id);
-            return isdeleted;
+            ResponseModel<User> response = new ResponseModel<User>();
+            try
+            {
+                response = await _userService.DeleteUser(id);
+                if (!response.Status)
+                {
+                    return BadRequest(response);
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                response.Status = false;
+                return BadRequest(response);
+            }
         }
 
 
