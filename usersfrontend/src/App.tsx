@@ -6,6 +6,8 @@ import { Footer } from './Components/Footer/Footer';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Users } from './Components/Users';
 import { UserList } from './Components/UserList';
+import { User } from './Components/User';
+import { EditUser } from './Components/EditUser';
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
     <Routes>
       <Route index element={<Users />} />
       <Route path="/users" element={<UserList />} />
+      <Route path="/user/:id" element={<User />} />
+      <Route path="/user/edit/:id" element={<EditUser />} />
     </Routes>
     </BrowserRouter>
     <Footer />

@@ -1,0 +1,14 @@
+.profile-header {
+    background: #343a40;
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+  }
+  .profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid white;
+    margin-top: -75px;
+  }

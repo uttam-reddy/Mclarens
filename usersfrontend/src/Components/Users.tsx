@@ -19,7 +19,7 @@ export function Users() {
         <h3 className="text-center mb-4">Featured Team Members</h3>
         <div className="row justify-content-center">
           <div className="col-md-6 team-member text-center p-4 bg-white">
-            <img src="https://www.mclarens.com/wp-content/uploads/2021/03/Alberto-Levy.jpg" className="img-fluid rounded-circle mb-3" alt="Alberto Levy" width="150"/>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Virat_Kohli_during_the_India_vs_Aus_4th_Test_match_at_Narendra_Modi_Stadium_on_09_March_2023.jpg" className="img-fluid rounded-circle mb-3" alt="Alberto Levy" width="150"/>
             <h4>Alberto Levy</h4>
             <p className="text-muted">Senior Loss Adjuster</p>
             <p>Alberto brings over two decades of experience in handling complex claims across various industries. His commitment to excellence ensures that clients receive the highest standard of service.</p>

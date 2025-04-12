@@ -18,6 +18,10 @@ namespace Models
 
         public bool IsDeleted { get; set; }
 
+        public string Designation { get; set; }
+        public string About { get; set; }
+
+
         public Guid DepartmentId { get; set; }
 
 

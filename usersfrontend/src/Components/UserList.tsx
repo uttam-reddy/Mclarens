@@ -1,4 +1,43 @@
+import {  useEffect, useState } from "react";
+import axios from "axios";
+import {API_URL} from "../Constants/appconstants";
+import {UsersResponse} from "../Types/UserType";
+import './assets/css/UserList.css';
+import { useNavigate } from "react-router-dom";
 export function UserList() {   
+   const navigate=useNavigate();
+
+   
+   const [users, setUsers] = useState<UsersResponse | null>();
+    useEffect(() => {
+      axios.get(API_URL + 'api/User')
+        .then((response ) => {
+          if(response.data.status === true) {
+            const modifiedData = {
+              ...response.data,
+              entity: response.data.entity.map((user: any) => ({
+                ...user,
+                createdDate: new Date(user.createdDate).toLocaleDateString('en-US'),
+                updatedDate: new Date(user.updatedDate).toLocaleDateString('en-US'),
+              })),
+            };
+            setUsers(modifiedData);
+            
+          }
+
+           // Handle the user data here
+        })
+        .catch(error => {
+          console.error('Error fetching user data:', error);
+        }
+        );
+    },[]);
+
+     const NavigatetoUserProfile = (id : string) => {
+             navigate(`/user/${id}`);
+         }    
+
+        // Fetch user data from an API or perform any other side effects here 
 
     return(
         <div>
@@ -11,28 +50,28 @@ export function UserList() {
           <th>#</th>
           <th>Name</th>
           <th>Email</th>
-          <th>Role</th>
+          <th>City</th>
+          <th>Address</th>
+          <th>CreatedDate</th>
+          <th>UpdatedDate</th>
+
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>John Doe</td>
-          <td>john.doe@example.com</td>
-          <td>Administrator</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Jane Smith</td>
-          <td>jane.smith@example.com</td>
-          <td>Editor</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Mike Johnson</td>
-          <td>mike.johnson@example.com</td>
-          <td>Viewer</td>
-        </tr>
+        {users?.entity?.map((user, index) => 
+        ( 
+           <tr>
+           <td >{index+1}</td>
+           <td className="user-name" onClick={() => NavigatetoUserProfile(user.id)}>{user.name}</td>
+           <td >{user.email}</td>
+           <td>{user.city}</td>
+           <td>{user.address}</td>
+           <td >{user.createdDate}</td>
+           <td >{user.updatedDate}</td>
+         </tr>
+        ))}
+        
+        
       </tbody>
     </table>
   </div>
