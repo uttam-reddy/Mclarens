@@ -18,7 +18,7 @@ function App() {
       <Route index element={<Users />} />
       <Route path="/users" element={<UserList />} />
       <Route path="/user/:id" element={<User />} />
-      <Route path="/user/edit/:id" element={<EditUser />} />
+      <Route path="/user/:edit/:id" element={<EditUser />} />
     </Routes>
     </BrowserRouter>
     <Footer />

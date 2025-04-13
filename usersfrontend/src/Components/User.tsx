@@ -26,7 +26,7 @@ export function User() {
             });
     },[]);
     const EditProfile = (id : string | undefined) => {
-        navigate(`/user/edit/${id}`);
+        navigate(`/user/Edit/${id}`);
     }
     return (
         <div>

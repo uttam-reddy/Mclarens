@@ -34,7 +34,10 @@ namespace Services.Services
                 userdto.CreatedDate = DateTime.Now;
                 userdto.UpdatedDate = DateTime.Now;
                 userdto.IsDeleted = false;
-                userdto.DepartmentId = user.DepartmentId;
+                userdto.About = user.About;
+                userdto.Designation = user.Designation;
+                userdto.DepartmentId = Guid.Parse("8A6EBD10-6498-4B24-BDBB-177CAA32F54C");
+
                 _context.Users.Add(userdto);
                 await _context.SaveChangesAsync();
                 response.Entity = await _context.Users.FindAsync(userdto.Id);
@@ -129,6 +132,7 @@ namespace Services.Services
                 var userbyid = _context.Users.FindAsync(user.Id).Result;
                 userbyid.IsDeleted = user.IsDeleted;
                 userbyid.Address = user.Address;
+                userbyid.Name = user.Name;
                 userbyid.City = user.City;
                 userbyid.Email = user.Email;
                 userbyid.DepartmentId = user.DepartmentId;
